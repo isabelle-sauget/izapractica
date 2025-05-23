@@ -92,6 +92,42 @@ async function searchById() {
   }
 }
 
+const editingId = ref(null)
+const editForm = ref({ index1: '', field1: '', field2: '', field3: '' })
+
+function startEdit(record) {
+  editingId.value = record.id
+  editForm.value = { ...record }
+}
+function cancelEdit() {
+  editingId.value = null
+}
+const showSaveDialog = ref(false)
+
+function confirmSaveEdit() {
+  showSaveDialog.value = true
+}
+function cancelSaveDialog() {
+  showSaveDialog.value = false
+}
+async function saveEditConfirmed(id) {
+  error.value = ''
+  try {
+    const res = await fetch(`${apiUrl}/api/records/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(editForm.value)
+    })
+    if (!res.ok) throw new Error('Failed to update record')
+    await fetchRecords()
+    editingId.value = null // <-- ensure edit mode is exited after save
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    showSaveDialog.value = false
+  }
+}
+
 onMounted(fetchRecords)
 </script>
 
@@ -120,17 +156,31 @@ onMounted(fetchRecords)
             <th>Field1</th>
             <th>Field2</th>
             <th>Field3</th>
-            <th>Delete</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="record in records" :key="record.id">
             <td>{{ record.id }}</td>
-            <td>{{ record.index1 }}</td>
-            <td>{{ record.field1 }}</td>
-            <td>{{ record.field2 }}</td>
-            <td>{{ record.field3 }}</td>
-            <td><button @click="confirmDelete(record.id)">Delete</button></td>
+            <td v-if="editingId !== record.id">{{ record.index1 }}</td>
+            <td v-else><input v-model="editForm.index1" /></td>
+            <td v-if="editingId !== record.id">{{ record.field1 }}</td>
+            <td v-else><input v-model="editForm.field1" /></td>
+            <td v-if="editingId !== record.id">{{ record.field2 }}</td>
+            <td v-else><input v-model="editForm.field2" /></td>
+            <td v-if="editingId !== record.id">{{ record.field3 }}</td>
+            <td v-else><input v-model="editForm.field3" /></td>
+            <td>
+              <template v-if="editingId === record.id">
+                <button class="save-btn" @click="confirmSaveEdit">Save</button>
+                <button class="cancel-btn" @click="cancelEdit">Cancel</button>
+                <!-- Hide Edit and Delete while editing -->
+              </template>
+              <template v-else>
+                <button class="edit-btn" @click="startEdit(record)">Edit</button>
+                <button @click="confirmDelete(record.id)">Delete</button>
+              </template>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -142,6 +192,14 @@ onMounted(fetchRecords)
       <div class="dialog-actions">
         <button @click="deleteRecord">Yes, Delete</button>
         <button @click="cancelDelete">Cancel</button>
+      </div>
+    </dialog>
+    <!-- Save confirmation dialog -->
+    <dialog v-if="showSaveDialog" open class="confirm-dialog">
+      <div>Are you sure you want to save the changes to this record?</div>
+      <div class="dialog-actions">
+        <button @click="saveEditConfirmed(editingId)">Yes, Save</button>
+        <button @click="cancelSaveDialog">Cancel</button>
       </div>
     </dialog>
     <section class="search-section">
@@ -356,6 +414,41 @@ body, main {
   box-shadow: 0 4px 24px rgba(30,41,59,0.10);
   padding: 2.5rem 2rem;
   margin: 2.5rem auto;
-  max-width: 900px;
+  max-width: 1200px; /* was 900px, now wider */
+}
+.edit-btn, .save-btn, .cancel-btn {
+  margin-right: 0.3rem;
+  background: #38bdf8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.save-btn {
+  background: #22c55e;
+}
+.cancel-btn {
+  background: #fbbf24;
+  color: #1e293b;
+}
+.edit-btn:hover {
+  background: #0ea5e9;
+}
+.save-btn:hover {
+  background: #16a34a;
+}
+.cancel-btn:hover {
+  background: #f59e42;
+  color: #fff;
+}
+.table-section input {
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #bdbdbd;
+  width: 100%;
+  box-sizing: border-box;
 }
 </style>
