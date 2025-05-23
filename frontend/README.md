@@ -1,30 +1,41 @@
-# Full Stack Dockerized Application
+# Proiect Clinica
 
-This project contains:
-- **Frontend**: Vue.js SPA (Vite)
-- **Backend**: Spring Boot REST API
-- **Database**: PostgreSQL
-- **Orchestration**: Docker Compose
+This is a full-stack application with a Vue.js SPA frontend, a Spring Boot REST API backend, and a PostgreSQL database. All services are containerized and orchestrated with Docker Compose.
 
-## Getting Started
+## Prerequisites
+- [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/) installed
+- [Git](https://git-scm.com/)
 
-### Prerequisites
-- Docker & Docker Compose installed
+## Installation & Running
 
-### Running the Application
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/jeancipa/izapractica.git
+   cd izapractica
+   ```
 
-1. Build and start all services:
+2. **Build and start all services:**
    ```sh
    docker compose up --build
    ```
-2. Frontend: http://localhost:5173
-3. Backend API: http://localhost:8080
-4. PostgreSQL: localhost:5432 (user: postgres, password: postgres)
+   This will start the frontend (Vue.js), backend (Spring Boot), PostgreSQL database, and pgAdmin.
 
-### Development
-- Frontend code: root directory (`src/`)
-- Backend code: `backend/`
+3. **Access the application:**
+   - Frontend: [http://localhost:5173](http://localhost:5173)
+   - Backend API: [http://localhost:8080](http://localhost:8080)
+   - pgAdmin: [http://localhost:5050](http://localhost:5050) (login: admin@admin.com / admin)
+
+4. **Stopping the services:**
+   Press `Ctrl+C` in the terminal, then run:
+   ```sh
+   docker compose down
+   ```
+
+## Notes
+- All data in the database and pgAdmin settings are persisted using Docker volumes.
+- You can manage the database visually using pgAdmin.
+- The frontend supports adding, listing, deleting, and searching records by ID.
 
 ---
 
-For customizations, edit the respective Dockerfiles, `docker-compose.yml`, or service source code.
+For any issues, please open an issue on the [GitHub repository](https://github.com/jeancipa/izapractica).
