@@ -6,6 +6,19 @@ This is a full-stack application with a Vue.js SPA frontend, a Spring Boot REST 
 - [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/) installed
 - [Git](https://git-scm.com/)
 
+### How to Install Docker and Docker Compose (Windows)
+
+1. **Install Docker Desktop:**
+   - Download Docker Desktop for Windows from [here](https://www.docker.com/products/docker-desktop/).
+   - Run the installer and follow the setup instructions.
+   - Docker Compose is included with Docker Desktop.
+
+2. **Verify installation:**
+   ```sh
+   docker --version
+   docker compose version
+   ```
+
 ## Installation & Running
 
 1. **Clone the repository:**
