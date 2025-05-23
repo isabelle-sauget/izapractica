@@ -77,6 +77,7 @@ onMounted(fetchRecords)
 </script>
 
 <template>
+  <div class="page-title">Proiect Clinica</div>
   <div class="form-card">
     <h2>Add New Record</h2>
     <form @submit.prevent="submitForm">
@@ -153,6 +154,17 @@ onMounted(fetchRecords)
 </template>
 
 <style scoped>
+.page-title {
+  text-align: center;
+  font-size: 2.2em;
+  font-weight: 800;
+  margin: 1.5em 0 1.5em 0;
+  color: #1e293b;
+  background: linear-gradient(90deg, #6366f1 0%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 .form-card {
   background: #f0f4ff;
   padding: 2em;
