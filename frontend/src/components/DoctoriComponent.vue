@@ -5,13 +5,14 @@ const form = ref({
   nume: '',
   prenume: '',
   cnp: '',
-  telefon: '',
   adresa: '',
-  dataNasterii: '',
+  telefon: '',
   email: '',
-  dateMedicale: ''
+  specializare: '',
+  clinica: '',
+  alteInformatii: ''
 })
-const pacienti = ref([])
+const doctori = ref([])
 const loading = ref(false)
 const error = ref('')
 
@@ -21,13 +22,13 @@ const searchError = ref('')
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
-async function fetchPacienti() {
+async function fetchDoctori() {
   loading.value = true
   error.value = ''
   try {
-    const res = await fetch(`${apiUrl}/api/pacienti`)
-    if (!res.ok) throw new Error('Failed to fetch pacienti')
-    pacienti.value = await res.json()
+    const res = await fetch(`${apiUrl}/api/doctori`)
+    if (!res.ok) throw new Error('Failed to fetch doctori')
+    doctori.value = await res.json()
   } catch (e) {
     error.value = e.message
   } finally {
@@ -38,46 +39,46 @@ async function fetchPacienti() {
 async function submitForm() {
   error.value = ''
   try {
-    const res = await fetch(`${apiUrl}/api/pacienti`, {
+    const res = await fetch(`${apiUrl}/api/doctori`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form.value)
     })
-    if (!res.ok) throw new Error('Failed to create pacient')
-    form.value = { nume: '', prenume: '', cnp: '', telefon: '', adresa: '', dataNasterii: '', email: '', dateMedicale: '' }
-    await fetchPacienti()
+    if (!res.ok) throw new Error('Failed to create doctor')
+    form.value = { nume: '', prenume: '', cnp: '', adresa: '', telefon: '', email: '', specializare: '', clinica: '', alteInformatii: '' }
+    await fetchDoctori()
   } catch (e) {
     error.value = e.message
   }
 }
 
 const showDialog = ref(false)
-const pacientToDelete = ref(null)
+const doctorToDelete = ref(null)
 
-function confirmDelete(pacientId) {
-  pacientToDelete.value = pacientId
+function confirmDelete(doctorId) {
+  doctorToDelete.value = doctorId
   showDialog.value = true
 }
 
-async function deletePacient() {
-  if (!pacientToDelete.value) return
+async function deleteDoctor() {
+  if (!doctorToDelete.value) return
   error.value = ''
   try {
-    const res = await fetch(`${apiUrl}/api/pacienti/${pacientToDelete.value}`, {
+    const res = await fetch(`${apiUrl}/api/doctori/${doctorToDelete.value}`, {
       method: 'DELETE'
     })
-    if (!res.ok) throw new Error('Failed to delete pacient')
-    await fetchPacienti()
+    if (!res.ok) throw new Error('Failed to delete doctor')
+    await fetchDoctori()
   } catch (e) {
     error.value = e.message
   } finally {
     showDialog.value = false
-    pacientToDelete.value = null
+    doctorToDelete.value = null
   }
 }
 function cancelDelete() {
   showDialog.value = false
-  pacientToDelete.value = null
+  doctorToDelete.value = null
 }
 
 async function searchById() {
@@ -88,8 +89,8 @@ async function searchById() {
     return
   }
   try {
-    const res = await fetch(`${apiUrl}/api/pacienti/${searchId.value}`)
-    if (!res.ok) throw new Error('Pacient not found')
+    const res = await fetch(`${apiUrl}/api/doctori/${searchId.value}`)
+    if (!res.ok) throw new Error('Doctor not found')
     searchResult.value = await res.json()
   } catch (e) {
     searchError.value = e.message
@@ -101,16 +102,17 @@ const editForm = ref({
   nume: '',
   prenume: '',
   cnp: '',
-  telefon: '',
   adresa: '',
-  dataNasterii: '',
+  telefon: '',
   email: '',
-  dateMedicale: ''
+  specializare: '',
+  clinica: '',
+  alteInformatii: ''
 })
 
-function startEdit(pacient) {
-  editingId.value = pacient.id
-  editForm.value = { ...pacient }
+function startEdit(doctor) {
+  editingId.value = doctor.id
+  editForm.value = { ...doctor }
 }
 function cancelEdit() {
   editingId.value = null
@@ -126,13 +128,13 @@ function cancelSaveDialog() {
 async function saveEditConfirmed(id) {
   error.value = ''
   try {
-    const res = await fetch(`${apiUrl}/api/pacienti/${id}`, {
+    const res = await fetch(`${apiUrl}/api/doctori/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(editForm.value)
     })
-    if (!res.ok) throw new Error('Failed to update pacient')
-    await fetchPacienti()
+    if (!res.ok) throw new Error('Failed to update doctor')
+    await fetchDoctori()
     editingId.value = null
   } catch (e) {
     error.value = e.message
@@ -141,31 +143,32 @@ async function saveEditConfirmed(id) {
   }
 }
 
-onMounted(fetchPacienti)
+onMounted(fetchDoctori)
 </script>
 
 <template>
   <main class="main-content">
-    <h1 class="gradient-title">Proiect Clinica - Pacienti</h1>
+    <h1 class="gradient-title">Proiect Clinica - Doctori</h1>
     <form @submit.prevent="submitForm" class="form">
       <label>Nume <input v-model="form.nume" required /></label>
       <label>Prenume <input v-model="form.prenume" required /></label>
       <label>CNP <input v-model="form.cnp" required /></label>
       <label>Telefon <input v-model="form.telefon" required /></label>
       <label>Adresa <input v-model="form.adresa" required /></label>
-      <label>Data Nasterii <input v-model="form.dataNasterii" type="date" required /></label>
       <label>Email <input v-model="form.email" type="email" required /></label>
-      <label>Date Medicale <input v-model="form.dateMedicale" required /></label>
-      <button type="submit">Adauga Pacient</button>
+      <label>Specializare <input v-model="form.specializare" required /></label>
+      <label>Clinica <input v-model="form.clinica" required /></label>
+      <label>Alte Informatii <input v-model="form.alteInformatii" required /></label>
+      <button type="submit">Adauga Doctor</button>
     </form>
     <div v-if="error" class="error">{{ error }}</div>
     <section class="table-section">
       <div class="records-header">
-        <h2>Toti Pacientii</h2>
-        <button class="refresh-btn" @click="fetchPacienti">Refresh</button>
+        <h2>Toti Doctorii</h2>
+        <button class="refresh-btn" @click="fetchDoctori">Refresh</button>
       </div>
       <div v-if="loading">Loading...</div>
-      <table v-if="pacienti.length">
+      <table v-if="doctori.length">
         <thead>
           <tr>
             <th>ID</th>
@@ -174,55 +177,58 @@ onMounted(fetchPacienti)
             <th>CNP</th>
             <th>Telefon</th>
             <th>Adresa</th>
-            <th>Data Nasterii</th>
             <th>Email</th>
-            <th>Date Medicale</th>
+            <th>Specializare</th>
+            <th>Clinica</th>
+            <th>Alte Informatii</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="pacient in pacienti" :key="pacient.id">
-            <td>{{ pacient.id }}</td>
-            <td v-if="editingId !== pacient.id">{{ pacient.nume }}</td>
+          <tr v-for="doctor in doctori" :key="doctor.id">
+            <td>{{ doctor.id }}</td>
+            <td v-if="editingId !== doctor.id">{{ doctor.nume }}</td>
             <td v-else><input v-model="editForm.nume" /></td>
-            <td v-if="editingId !== pacient.id">{{ pacient.prenume }}</td>
+            <td v-if="editingId !== doctor.id">{{ doctor.prenume }}</td>
             <td v-else><input v-model="editForm.prenume" /></td>
-            <td v-if="editingId !== pacient.id">{{ pacient.cnp }}</td>
+            <td v-if="editingId !== doctor.id">{{ doctor.cnp }}</td>
             <td v-else><input v-model="editForm.cnp" /></td>
-            <td v-if="editingId !== pacient.id">{{ pacient.telefon }}</td>
+            <td v-if="editingId !== doctor.id">{{ doctor.telefon }}</td>
             <td v-else><input v-model="editForm.telefon" /></td>
-            <td v-if="editingId !== pacient.id">{{ pacient.adresa }}</td>
+            <td v-if="editingId !== doctor.id">{{ doctor.adresa }}</td>
             <td v-else><input v-model="editForm.adresa" /></td>
-            <td v-if="editingId !== pacient.id">{{ pacient.dataNasterii }}</td>
-            <td v-else><input v-model="editForm.dataNasterii" type="date" /></td>
-            <td v-if="editingId !== pacient.id">{{ pacient.email }}</td>
+            <td v-if="editingId !== doctor.id">{{ doctor.email }}</td>
             <td v-else><input v-model="editForm.email" type="email" /></td>
-            <td v-if="editingId !== pacient.id">{{ pacient.dateMedicale }}</td>
-            <td v-else><input v-model="editForm.dateMedicale" /></td>
+            <td v-if="editingId !== doctor.id">{{ doctor.specializare }}</td>
+            <td v-else><input v-model="editForm.specializare" /></td>
+            <td v-if="editingId !== doctor.id">{{ doctor.clinica }}</td>
+            <td v-else><input v-model="editForm.clinica" /></td>
+            <td v-if="editingId !== doctor.id">{{ doctor.alteInformatii }}</td>
+            <td v-else><input v-model="editForm.alteInformatii" /></td>
             <td>
-              <template v-if="editingId === pacient.id">
+              <template v-if="editingId === doctor.id">
                 <button class="save-btn" @click="confirmSaveEdit">Save</button>
                 <button class="cancel-btn" @click="cancelEdit">Cancel</button>
               </template>
               <template v-else>
-                <button class="edit-btn" @click="startEdit(pacient)">Edit</button>
-                <button @click="confirmDelete(pacient.id)">Delete</button>
+                <button class="edit-btn" @click="startEdit(doctor)">Edit</button>
+                <button @click="confirmDelete(doctor.id)">Delete</button>
               </template>
             </td>
           </tr>
         </tbody>
       </table>
-      <div v-else>No pacienti found.</div>
+      <div v-else>No doctori found.</div>
     </section>
     <dialog v-if="showDialog" open class="confirm-dialog">
-      <div>Are you sure you want to delete this pacient?</div>
+      <div>Are you sure you want to delete this doctor?</div>
       <div class="dialog-actions">
-        <button @click="deletePacient">Yes, Delete</button>
+        <button @click="deleteDoctor">Yes, Delete</button>
         <button @click="cancelDelete">Cancel</button>
       </div>
     </dialog>
     <dialog v-if="showSaveDialog" open class="confirm-dialog">
-      <div>Are you sure you want to save the changes to this pacient?</div>
+      <div>Are you sure you want to save the changes to this doctor?</div>
       <div class="dialog-actions">
         <button @click="saveEditConfirmed(editingId)">Yes, Save</button>
         <button @click="cancelSaveDialog">Cancel</button>
@@ -244,9 +250,10 @@ onMounted(fetchPacienti)
           <div><strong>CNP:</strong> {{ searchResult.cnp }}</div>
           <div><strong>Telefon:</strong> {{ searchResult.telefon }}</div>
           <div><strong>Adresa:</strong> {{ searchResult.adresa }}</div>
-          <div><strong>Data Nasterii:</strong> {{ searchResult.dataNasterii }}</div>
           <div><strong>Email:</strong> {{ searchResult.email }}</div>
-          <div><strong>Date Medicale:</strong> {{ searchResult.dateMedicale }}</div>
+          <div><strong>Specializare:</strong> {{ searchResult.specializare }}</div>
+          <div><strong>Clinica:</strong> {{ searchResult.clinica }}</div>
+          <div><strong>Alte Informatii:</strong> {{ searchResult.alteInformatii }}</div>
         </div>
       </div>
     </section>
@@ -444,7 +451,7 @@ body, main {
   box-shadow: 0 4px 24px rgba(30,41,59,0.10);
   padding: 2.5rem 2rem;
   margin: 2.5rem auto;
-  max-width: 1200px; /* was 900px, now wider */
+  max-width: 1200px;
 }
 .edit-btn, .save-btn, .cancel-btn {
   margin-right: 0.3rem;

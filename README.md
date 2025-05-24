@@ -50,44 +50,94 @@ The Vue.js frontend communicates with the Spring Boot backend via REST API endpo
 
 ### API Endpoints
 
-All endpoints are prefixed with `/api/records`:
+All endpoints are prefixed with `/api/pacienti`:
 
-- **GET `/api/records`**
-  - List all records.
-  - **Response:** Array of record objects.
+- **GET `/api/pacienti`**
+  - List all pacienti.
+  - **Response:** Array of pacient objects.
 
-- **GET `/api/records/{id}`**
-  - Get a single record by its ID.
-  - **Response:** Record object if found, 404 if not found.
+- **GET `/api/pacienti/{id}`**
+  - Get a single pacient by its ID.
+  - **Response:** Pacient object if found, 404 if not found.
 
-- **POST `/api/records`**
-  - Create a new record.
+- **POST `/api/pacienti`**
+  - Create a new pacient.
   - **Request body:**
     ```json
     {
-      "index1": "string",
-      "field1": "string",
-      "field2": "string",
-      "field3": "string"
+      "nume": "string",
+      "prenume": "string",
+      "cnp": "string",
+      "telefon": "string",
+      "adresa": "string",
+      "dataNasterii": "YYYY-MM-DD",
+      "email": "string",
+      "dateMedicale": "string"
     }
     ```
-  - **Response:** The created record object.
+  - **Response:** The created pacient object.
 
-- **PUT `/api/records/{id}`**
-  - Update an existing record by ID.
+- **PUT `/api/pacienti/{id}`**
+  - Update an existing pacient by ID.
   - **Request body:** Same as POST.
-  - **Response:** The updated record object.
+  - **Response:** The updated pacient object.
 
-- **DELETE `/api/records/{id}`**
-  - Delete a record by ID.
+- **DELETE `/api/pacienti/{id}`**
+  - Delete a pacient by ID.
   - **Response:** 204 No Content if successful.
 
 The frontend uses these endpoints to:
-- List all records in a table
-- Add new records
-- Edit records inline
-- Delete records (with confirmation)
-- Search for a record by ID
+- List all pacienti in a table
+- Add new pacienti
+- Edit pacienti inline
+- Delete pacienti (with confirmation)
+- Search for a pacient by ID
+
+### API Endpoints (Doctori)
+
+All endpoints are prefixed with `/api/doctori`:
+
+- **GET `/api/doctori`**
+  - List all doctori.
+  - **Response:** Array of doctor objects.
+
+- **GET `/api/doctori/{id}`**
+  - Get a single doctor by its ID.
+  - **Response:** Doctor object if found, 404 if not found.
+
+- **POST `/api/doctori`**
+  - Create a new doctor.
+  - **Request body:**
+    ```json
+    {
+      "nume": "string",
+      "prenume": "string",
+      "cnp": "string",
+      "adresa": "string",
+      "telefon": "string",
+      "email": "string",
+      "specializare": "string",
+      "clinica": "string",
+      "alteInformatii": "string"
+    }
+    ```
+  - **Response:** The created doctor object.
+
+- **PUT `/api/doctori/{id}`**
+  - Update an existing doctor by ID.
+  - **Request body:** Same as POST.
+  - **Response:** The updated doctor object.
+
+- **DELETE `/api/doctori/{id}`**
+  - Delete a doctor by ID.
+  - **Response:** 204 No Content if successful.
+
+The frontend uses these endpoints to:
+- List all doctori in a table
+- Add new doctori
+- Edit doctori inline
+- Delete doctori (with confirmation)
+- Search for a doctor by ID
 
 ## Viewing the Database Table in pgAdmin
 
