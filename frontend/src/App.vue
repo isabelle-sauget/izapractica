@@ -11,9 +11,11 @@ const page = ref('pacienti')
     <nav style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
       <button @click="page = 'pacienti'" :class="{ active: page === 'pacienti' }">Pacienti</button>
       <button @click="page = 'doctori'" :class="{ active: page === 'doctori' }">Doctori</button>
+      <button @click="page = 'retete'" :class="{ active: page === 'retete' }">Retete</button>
     </nav>
     <MainComponent v-if="page === 'pacienti'" />
-    <DoctoriComponent v-else />
+    <DoctoriComponent v-else-if="page === 'doctori'" />
+    <ReteteComponent v-else />
   </div>
 </template>
 

@@ -139,6 +139,54 @@ The frontend uses these endpoints to:
 - Delete doctori (with confirmation)
 - Search for a doctor by ID
 
+### API Endpoints (Retete)
+
+All endpoints are prefixed with `/api/retete`:
+
+- **GET `/api/retete`**
+  - List all retete (prescriptions).
+  - **Response:** Array of reteta objects.
+
+- **GET `/api/retete/{id}`**
+  - Get a single reteta by its ID.
+  - **Response:** Reteta object if found, 404 if not found.
+
+- **POST `/api/retete`**
+  - Create a new reteta (prescription).
+  - **Request body:**
+    ```json
+    {
+      "doctor": { "id": 1 },
+      "pacient": { "id": 2 },
+      "data": "YYYY-MM-DD",
+      "reteta": "string",
+      "compensata": "DA" // or "NU"
+    }
+    ```
+  - **Response:** The created reteta object.
+
+- **PUT `/api/retete/{id}`**
+  - Update an existing reteta by ID.
+  - **Request body:** Same as POST.
+  - **Response:** The updated reteta object.
+
+- **DELETE `/api/retete/{id}`**
+  - Delete a reteta by ID.
+  - **Response:** 204 No Content if successful.
+
+The frontend uses these endpoints to:
+- List all retete in a table
+- Add new retete (with dropdowns for doctor and pacient)
+- Edit retete inline (including changing doctor/pacient)
+- Delete retete (with confirmation)
+- Search for a reteta by ID
+
+## Frontend Pages
+
+- **Pacienti:** Manage patients (CRUD, search, inline edit)
+- **Doctori:** Manage doctors (CRUD, search, inline edit)
+- **Retete:** Manage prescriptions (CRUD, search, inline edit). When adding or editing a reteta, you can select a doctor and pacient from dropdowns populated with their names from the respective tables. Fields: Doctor, Pacient, Data, Reteta, Compensata (DA/NU).
+
 ## Viewing the Database Table in pgAdmin
 
 1. **Open pgAdmin:**
@@ -159,8 +207,8 @@ The frontend uses these endpoints to:
 
 3. **Browse the table:**
    - Expand the server, then **Databases > postgres > Schemas > public > Tables**.
-   - You will see the application's table (e.g., `record`).
-   - Right-click the table and select **View/Edit Data > All Rows** to see and manage the data.
+   - You will see the application's tables: `pacient`, `doctor`, and `reteta`.
+   - Right-click any table and select **View/Edit Data > All Rows** to see and manage the data.
 
 ## Notes
 - All data in the database and pgAdmin settings are persisted using Docker volumes.
