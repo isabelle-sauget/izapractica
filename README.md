@@ -48,6 +48,7 @@ This is a full-stack application with a Vue.js SPA frontend, a Spring Boot REST 
 
 The Vue.js frontend communicates with the Spring Boot backend via REST API endpoints. All API requests are sent to the backend service, which manages records in the PostgreSQL database.
 
+
 ### API Endpoints
 
 All endpoints are prefixed with `/api/pacienti`:
