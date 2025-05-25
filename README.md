@@ -23,8 +23,8 @@ This is a full-stack application with a Vue.js SPA frontend, a Spring Boot REST 
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/jeancipa/izapractica.git
-   cd izapractica
+   git clone https://github.com/NEW_GITHUB_USERNAME/proiect_medical.git
+   cd proiect_medical
    ```
 
 2. **Build and start all services:**
@@ -217,4 +217,4 @@ The frontend uses these endpoints to:
 
 ---
 
-For any issues, please open an issue on the [GitHub repository](https://github.com/jeancipa/izapractica).
+For any issues, please open an issue on the [GitHub repository](https://github.com/NEW_GITHUB_USERNAME/proiect_medical).
