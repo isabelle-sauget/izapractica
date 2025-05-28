@@ -1,6 +1,7 @@
 <script setup>
 import MainComponent from './components/MainComponent.vue'
 import DoctoriComponent from './components/DoctoriComponent.vue'
+import ReteteComponent from './components/ReteteComponent.vue'
 import { ref } from 'vue'
 
 const page = ref('pacienti')

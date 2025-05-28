@@ -208,7 +208,7 @@ onMounted(() => {
         </select>
       </label>
       <label>Data <input v-model="form.data" type="date" required /></label>
-      <label>Reteta <input v-model="form.reteta" required /></label>
+      <label>Reteta <textarea v-model="form.reteta" rows="4" style="resize:vertical; min-height: 80px;" required /></label>
       <label>Compensata
         <select v-model="form.compensata" required>
           <option value="DA">DA</option>
@@ -261,7 +261,7 @@ onMounted(() => {
             <td v-if="editingId !== reteta.id">{{ reteta.data }}</td>
             <td v-else><input v-model="editForm.data" type="date" /></td>
             <td v-if="editingId !== reteta.id">{{ reteta.reteta }}</td>
-            <td v-else><input v-model="editForm.reteta" /></td>
+            <td v-else><textarea v-model="editForm.reteta" rows="4" style="resize:vertical; min-height: 80px;" /></td>
             <td v-if="editingId !== reteta.id">{{ reteta.compensata }}</td>
             <td v-else>
               <select v-model="editForm.compensata">
@@ -344,7 +344,7 @@ onMounted(() => {
   font-weight: 500;
   color: #1e293b;
 }
-.form input, .form select {
+.form input, .form select, .form textarea {
   padding: 0.4rem 0.7rem;
   border-radius: 6px;
   border: 1px solid #64748b;
